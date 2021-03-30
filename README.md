@@ -29,6 +29,12 @@ class MyClass {
       }
     });
 
+    // register an asyncronous task
+    this.destructor.register(() => {
+      // do something async that returns a promise
+      return Promise.resolve();
+    });
+
     // any other tasks that need to be registered to the destructor
     // go here. Think event listeners or script tags, etc.
   }
@@ -36,8 +42,11 @@ class MyClass {
   teardown() {
     // if you need to clean up any changes MyClass made, call
     // teardown and the destructor will run any functions that
-    // were registered to it
-    this.destructor.teardown();
+    // were registered to it. It will resolve when all the
+    // syncronous methods are called and all the asyncronous
+    // methods resolve. It will reject if any of the syncronous
+    // or asyncronous methods throw an error.
+    return this.destructor.teardown();
   }
 }
 ```
